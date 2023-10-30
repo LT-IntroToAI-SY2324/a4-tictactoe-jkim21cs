@@ -9,9 +9,44 @@ class TTTBoard:
         board - a list of '*'s, 'X's & 'O's. 'X's represent moves by player 'X', 'O's
             represent moves by player 'O' and '*'s are spots no one has yet played on
     """
+    def __init__(self):
+        self.board =['*']*9 #immutable variable--> set as the intial don't need parameters because every time te board class is used it  makes a board. 
 
-    pass
+    def __str__(self) -> str:
+        s = ""
+        for x in [0, 3, 6]:
+            s += self.board[x + 0] + " " + self.board[x + 1] + " " + self.board[x + 2] + "\n"
+        return s
 
+    def make_move(self, player, pos) -> bool:
+        if pos < 0 or pos > 8 or self.board[pos] != '*':
+            return False
+
+        self.board[pos] = player
+        return True 
+    def has_won(self, player)-> bool:
+        """Check to see if the player has won"""
+        ps = [player]*3
+        #Horizontal 
+        if self.board[0:3] == ps or self.board[3:6] == ps or self.board [6:]:
+            return True
+       #vertical 
+        if self.board[::3] == ps or self.board[1::3] == ps or self.bord[2::3] == ps:
+            return True 
+        #diagonal
+        if self.board[::4] ==ps or self.baord[2:7:2] == ps:
+           return True 
+        
+        return False 
+    def game_over(self)-> bool:
+        """check if the board is full or if either X or O has won"""
+        if "x" not in self.baord or self.has_won("X") or self.has_won("O"):
+            return True
+        return False 
+    
+    def clear(self) -> None:
+        """Clear the board to reset the game"""
+        self.board = ['*']*9
 
 def play_tic_tac_toe() -> None:
     """Uses your class to play TicTacToe"""
@@ -61,8 +96,12 @@ if __name__ == "__main__":
     # need to write some more tests to make sure that your TTTBoard class is behaving
     # properly.
     brd = TTTBoard()
+    print(brd.board)
+    print(brd)
     brd.make_move("X", 8)
     brd.make_move("O", 7)
+    brd.make_move("O", 8)
+    print(brd)
 
     assert brd.game_over() == False
 
@@ -75,12 +114,15 @@ if __name__ == "__main__":
     assert brd.game_over() == True
 
     brd.clear()
+    print(brd)
 
     assert brd.game_over() == False
 
     brd.make_move("O", 3)
     brd.make_move("O", 4)
     brd.make_move("O", 5)
+
+    print(brd)
 
     assert brd.has_won("X") == False
     assert brd.has_won("O") == True
@@ -89,4 +131,4 @@ if __name__ == "__main__":
     print("All tests passed!")
 
     # uncomment to play!
-    # play_tic_tac_toe()
+    play_tic_tac_toe()
